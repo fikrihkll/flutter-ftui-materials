@@ -122,6 +122,7 @@ class _HomePageState extends State<HomePage> {
         name: _nameTextController.value.text,
         email: _emailTextController.value.text,
         hobby: _hobbyTextController.value.text);
+
     bool updateResult = await _databaseHelper.createStudent(newStudentEntity);
     if (updateResult) {
       _clearForms();
@@ -142,6 +143,7 @@ class _HomePageState extends State<HomePage> {
         name: _nameTextController.value.text, 
         email: _emailTextController.value.text,
         hobby: _hobbyTextController.value.text);
+
     bool updateResult = await _databaseHelper.updateStudent(newStudentEntity);
     if (updateResult) {
       _clearForms();
@@ -181,11 +183,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onAddAttendanceRequested(StudentEntity studentEntity) async {
-    var attendanceAdditionResult = await _databaseHelper.createAttendance(
-        AttendanceEntity(
-            id: 0,
-            studentId: studentEntity.id,
-            timestamp: DateTime.now().millisecondsSinceEpoch));
+    AttendanceEntity newAttendanceRecord = AttendanceEntity(
+        id: 0,
+        studentId: studentEntity.id,
+        timestamp: DateTime.now().millisecondsSinceEpoch);
+
+    var attendanceAdditionResult = await _databaseHelper.createAttendance(newAttendanceRecord);
     if (attendanceAdditionResult) {
       _showMessage("Berhasil menambahkan attendance ${studentEntity.name}");
     } else {
