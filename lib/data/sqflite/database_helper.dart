@@ -148,8 +148,8 @@ class DatabaseHelper {
     }
   }
 
-  static String _DATABASE_NAME = "student.db";
-  static int _DATABASE_VERSION = 1;
+  static const String _DATABASE_NAME = "student.db";
+  static const int _DATABASE_VERSION = 1;
   static DatabaseHelper? _instance;
   static DatabaseHelper getInstance() {
     _instance ??= DatabaseHelper._privateConstructor();
