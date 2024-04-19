@@ -22,7 +22,7 @@ class AttendanceCardWidget extends StatelessWidget {
         children: [
           Text("Attendance ID: ${entity.id}"),
           Text("Student ID: ${entity.studentId}"),
-          Text("Timestamp: ${_dateFormat.format(DateTime.fromMicrosecondsSinceEpoch(entity.timestamp))}"),
+          Text("Timestamp: ${_dateFormat.format(DateTime.fromMillisecondsSinceEpoch(entity.timestamp))}"),
         ],
       ),
     );
