@@ -18,7 +18,7 @@ class UserRepository {
   Future<Response?> getUserById(String userId) async {
     try {
       var data = await RemoteHelper.getDio()
-          .get("user/$userId");
+          .get("users/$userId");
       return data;
     } on DioException catch(e) {
       return e.response;
