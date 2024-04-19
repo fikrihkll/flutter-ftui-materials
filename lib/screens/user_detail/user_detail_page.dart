@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/models/remote/user_response.dart';
-import 'package:hello_world/models/request_result.dart';
 import 'package:hello_world/repositories/user_repository.dart';
-import 'package:hello_world/screens/home/widgets/user_card_widget.dart';
 import 'package:hello_world/screens/user_detail/widgets/user_detail_widget.dart';
-import 'package:hello_world/utils/remote_helper.dart';
 
 class UserDetailPage extends StatefulWidget {
 
@@ -17,10 +14,11 @@ class UserDetailPage extends StatefulWidget {
 
 class _UserDetailPageState extends State<UserDetailPage> {
 
-  final UserRepository _userRepository = RemoteHelper.getUserRepository();
+  final UserRepository _userRepository = UserRepository();
 
-  RequestResult<UserResponse>? _requestResult;
+  UserResponse? _user;
   bool _isLoading = true;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -43,6 +41,8 @@ class _UserDetailPageState extends State<UserDetailPage> {
                   _showResult()
                 ),
                 const SizedBox(height: 16,),
+                _showErrorText(),
+                const SizedBox(height: 16,),
                 MaterialButton(
                     color: Colors.blue,
                     onPressed: () {
@@ -59,21 +59,37 @@ class _UserDetailPageState extends State<UserDetailPage> {
   }
 
   Widget _showResult() {
-    if (_requestResult == null) {
+    if (_user == null) {
       return const Text("Gagal memuat data");
-    }
-
-    if (_requestResult!.isSuccess) {
-      return UserDetailWidget(entity: _requestResult!.data!);
     } else {
-      return Text("Error: ${_requestResult!.message}");
+      return UserDetailWidget(entity: _user!);
     }
+  }
+  
+  Widget _showErrorText() {
+    if (_errorMessage != null) {
+      return Text(_errorMessage!, style: const TextStyle(color: Colors.red),);
+    }
+    return const SizedBox();
   }
 
   void _getUserData() async {
     var result = await _userRepository.getUserById(widget.entity.id.toString());
     _isLoading = false;
-    _requestResult = result;
+
+    if (result == null) {
+      _errorMessage = result?.statusMessage ?? "Error";
+      setState(() {
+      });
+      return;
+    }
+
+    if (result.statusCode == 200 && result.data != null) {
+      _user = UserResponse.fromJson(result.data);
+    } else {
+      _errorMessage = result.statusMessage;
+    }
+    
     setState(() {
     });
   }

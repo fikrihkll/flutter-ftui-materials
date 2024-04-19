@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/data/services/user_service.dart';
 import 'package:hello_world/models/remote/user_response.dart';
 import 'package:hello_world/repositories/user_repository.dart';
 import 'package:hello_world/screens/home/widgets/user_card_widget.dart';
 import 'package:hello_world/screens/user_detail/user_detail_page.dart';
-import 'package:hello_world/utils/remote_helper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,7 +13,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  final UserRepository _userRepository = RemoteHelper.getUserRepository();
+  final UserRepository _userRepository = UserRepository();
 
   final List<UserResponse> _users = [];
 
@@ -60,13 +58,20 @@ class _HomePageState extends State<HomePage> {
   void _getUsersData() async {
     var result = await _userRepository.getAllUsers();
 
-    if (result.isSuccess && result.data != null) {
+    if (result == null) {
+      _showMessage(result?.statusMessage ?? "Error");
+      return;
+    }
+
+    if (result.statusCode == 200 && result.data != null) {
+      var data = result.data as List<dynamic>;
+      var mappedData = data.map((e) => UserResponse.fromJson(e)).toList();
       _users.clear();
-      _users.addAll(result.data!);
+      _users.addAll(mappedData);
       setState(() {
       });
     } else {
-      _showMessage("Gagal: ${result.message}");
+      _showMessage("Gagal: ${result.statusMessage}");
     }
   }
 
