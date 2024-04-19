@@ -8,7 +8,11 @@ class AttendanceEntity {
     required this.timestamp});
 
   factory AttendanceEntity.fromMap(Map<String, dynamic> map) {
-    return AttendanceEntity(id: map[COL_ID_KEY], studentId: map[COL_STUDENT_ID_KEY], timestamp: map[COL_TIMESTAMP_KEY]);
+    return AttendanceEntity(
+        id: map[COL_ID_KEY],
+        studentId: map[COL_STUDENT_ID_KEY],
+        timestamp: map[COL_TIMESTAMP_KEY]
+    );
   }
 
   Map<String, dynamic> toMap() {

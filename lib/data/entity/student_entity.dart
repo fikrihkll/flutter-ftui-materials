@@ -10,7 +10,12 @@ class StudentEntity {
     required this.hobby});
 
   factory StudentEntity.fromMap(Map<String, dynamic> map) {
-    return StudentEntity(id: map[COL_ID_KEY], name: map[COL_NAME_KEY], email: map[COL_EMAIL_KEY], hobby: map[COL_HOBBY_KEY]);
+    return StudentEntity(
+        id: map[COL_ID_KEY],
+        name: map[COL_NAME_KEY],
+        email: map[COL_EMAIL_KEY],
+        hobby: map[COL_HOBBY_KEY]
+    );
   }
 
   Map<String, dynamic> toMap() {
