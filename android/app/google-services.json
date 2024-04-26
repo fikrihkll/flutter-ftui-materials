@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "362256306358",
+    "project_id": "modul-flutter-ftui",
+    "storage_bucket": "modul-flutter-ftui.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362256306358:android:d537e9fe0d47033cb95617",
+        "android_client_info": {
+          "package_name": "com.example.hello_world"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBmkB8dgn-29LgHggidlOBm5tlrCFTkx0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
