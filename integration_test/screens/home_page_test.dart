@@ -6,7 +6,7 @@ import 'package:integration_test/integration_test.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('Input number 2 and 6 then press Add Number Button should show 4 and 10', (WidgetTester tester) async {
+  testWidgets('Input number 2 then press Button 2 times and input 6 then press once, should show 4 and 10', (WidgetTester tester) async {
     // Create HomePage
     await tester.pumpWidget(
         MaterialApp(
@@ -47,6 +47,5 @@ void main() {
     // Expect the text data is 10
     expect(text.data, "10");
   });
-
 
 }
