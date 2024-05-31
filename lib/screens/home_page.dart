@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_world/screens/edit_message_page.dart';
+import 'package:hello_world/screens/model/message.dart';
+import 'package:hello_world/screens/service/message_service.dart';
 import 'package:hello_world/screens/widget/message_card_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,9 +14,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final MessageService _messageService = MessageService();
+
   final TextEditingController _messageController = TextEditingController();
-  List<String> _messageList = [];
+  List<Message> _messageList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +50,15 @@ class _HomePageState extends State<HomePage> {
                   primary: false,
                   shrinkWrap: true,
                   itemBuilder: (context, position) {
-                    return MessageCardWidget(message: _messageList[position]);
+                    return MessageCardWidget(
+                        onDeleteClick: (message) {
+                          _deleteMessage(message);
+                        },
+                        onCardClick: (message) {
+                          _launchEditMessagePage(message);
+                        },
+                        message: _messageList[position]
+                    );
                   }
               )
             ],
@@ -56,39 +68,54 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _sendMessage() {
+  void _launchEditMessagePage(Message message) async {
+    var newMessage = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => EditMessagePage(message: message))
+    );
+
+    if (newMessage != null && newMessage is Message) {
+      var index = _messageList.indexWhere((element) => element.id == message.id);
+      _messageList[index] = newMessage;
+      setState(() {
+      });
+      _showPopUp("Berhasil Mengubah Pesan");
+    } else {
+      _showPopUp("Gagal Mengubah Pesan");
+    }
+  }
+
+  void _sendMessage() async {
     String newMessage = _messageController.text;
-    Map<String, dynamic> newDocument = {
-      "message": newMessage
-    };
-
-    _firestore.collection("chat")
-      .add(newDocument)
-      .then((value) {
-        _showPopUp("Berhasil kirim pesan");
-      })
-      .catchError((error) {
-        _showPopUp("Error: $error");
-      });
+    var result = await _messageService.sendMessage(newMessage);
+    if (result == true) {
+      _getMessage();
+      _showPopUp("Berhasil Menambahkan Pesan");
+    } else {
+      _showPopUp("Gagal Menambahkan Pesan");
+    }
   }
 
-  void _getMessage() {
-    _firestore
-      .collection("chat")
-      .get()
-      .then((value) {
-        value.docs.forEach((element) {
-          _messageList.add(element.get("message"));
-          setState(() {
-          });
-        });
-      })
-      .catchError((error) {
-        _showPopUp("Error Mengambil Data: $error");
+  void _deleteMessage(Message message) async {
+    var result = await _messageService.deleteMessage(message.id);
+    if (result == true) {
+      _messageList.remove(message);
+      setState(() {
       });
+      _showPopUp("Berhasil Menghapus Pesan");
+    } else {
+      _showPopUp("Gagal Menghapus Pesan");
+    }
   }
 
-  void _showPopUp(String message) {
+  void _getMessage() async {
+    List<Message> messageList = await _messageService.getMessage();
+    _messageList = messageList;
+    setState(() {
+    });
+  }
+
+    void _showPopUp(String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
