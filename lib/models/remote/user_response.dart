@@ -2,30 +2,27 @@ class UserResponse {
   final int id;
   final String username;
   final String email;
-  final CompanyResponse company;
+  final String firstName;
+  final String lastName;
+  final String token;
 
-  UserResponse({required this.id, required this.username, required this.email, required this.company});
+  UserResponse({
+    required this.id,
+    required this.username,
+    required this.email,
+    required this.firstName,
+    required this.lastName,
+    required this.token,
+  });
 
   factory UserResponse.fromJson(Map<String, dynamic> json) {
     return UserResponse(
         id: json["id"],
         username: json["username"],
         email: json["email"],
-        company: CompanyResponse.fromJson(json["company"])
-    );
-  }
-}
-
-class CompanyResponse {
-  final String name;
-  final String catchPhrase;
-
-  CompanyResponse({required this.name, required this.catchPhrase});
-
-  factory CompanyResponse.fromJson(Map<String, dynamic> json) {
-    return CompanyResponse(
-        name: json["name"],
-        catchPhrase: json["catchPhrase"]
+        firstName: json["firstName"],
+        lastName: json["lastName"],
+        token: json["token"]
     );
   }
 }
