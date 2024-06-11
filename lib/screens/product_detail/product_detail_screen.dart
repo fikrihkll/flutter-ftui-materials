@@ -112,7 +112,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         textInputAction: TextInputAction.done,
                         decoration: InputDecoration(
                             hintText: "Set product price",
-                            prefixText: "Rp.",
+                            prefixText: "\$",
                             prefixStyle: _theme.textTheme.bodyMedium),
                       ),
                       const SizedBox(
