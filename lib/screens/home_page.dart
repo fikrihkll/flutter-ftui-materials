@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, position) {
                     return MessageCardWidget(
                         onDeleteClick: (message) {
-                          _deleteMessage(message);
+                          _showDeleteConfirmationDialog(message);
                         },
                         onCardClick: (message) {
                           _launchEditMessagePage(message);
@@ -106,6 +106,29 @@ class _HomePageState extends State<HomePage> {
     } else {
       _showPopUp("Gagal Menghapus Pesan");
     }
+  }
+
+  void _showDeleteConfirmationDialog(Message message) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("Hapus Pesan?", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+            content: const Text("Pesan tidak dapat dirollback setelah terhapus, yakin ingin menghapus?"),
+            actions: [
+              TextButton(onPressed: () {
+                Navigator.pop(context);
+              }, child: const Text("Batalkan", style: TextStyle(color: Colors.red),)),
+              TextButton(
+                  onPressed: () {
+                    _deleteMessage(message);
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Ya")
+              )
+            ],
+          );
+        });
   }
 
   void _getMessage() async {
